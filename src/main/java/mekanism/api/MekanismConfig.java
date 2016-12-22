@@ -48,7 +48,6 @@ public class MekanismConfig
 		public static boolean blacklistRF;
 		public static boolean blacklistTesla;
 		public static boolean destroyDisabledBlocks;
-		public static boolean prefilledFluidTanks;
 		public static boolean prefilledGasTanks;
 		public static double armoredJetpackDamageRatio;
 		public static int armoredJetpackDamageMax;
@@ -70,6 +69,8 @@ public class MekanismConfig
 		public static double superheatingHeatTransfer = 10000;
 		public static double heatPerFuelTick = 4;
 		public static boolean allowTransmitterAlloyUpgrade;
+		public static boolean allowChunkloading;
+		public static boolean allowProtection = true;
 	}
 
 	public static class client

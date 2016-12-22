@@ -76,6 +76,8 @@ public class PacketConfigSync implements IMessageHandler<ConfigSyncMessage, IMes
 			dataStream.writeDouble(general.superheatingHeatTransfer);
 			dataStream.writeDouble(general.heatPerFuelTick);
 			dataStream.writeBoolean(general.allowTransmitterAlloyUpgrade);
+			dataStream.writeBoolean(general.allowChunkloading);
+			dataStream.writeBoolean(general.allowProtection);
 			
 			for(MachineType type : BlockStateMachine.MachineType.getValidMachines())
 			{
@@ -167,6 +169,8 @@ public class PacketConfigSync implements IMessageHandler<ConfigSyncMessage, IMes
 			general.superheatingHeatTransfer = dataStream.readDouble();
 			general.heatPerFuelTick = dataStream.readDouble();
 			general.allowTransmitterAlloyUpgrade = dataStream.readBoolean();
+			general.allowChunkloading = dataStream.readBoolean();
+			general.allowProtection = dataStream.readBoolean();
 			
 			for(MachineType type : BlockStateMachine.MachineType.getValidMachines())
 			{

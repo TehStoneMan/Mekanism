@@ -17,6 +17,7 @@ import mekanism.client.MekanismKeyHandler;
 import mekanism.common.Mekanism;
 import mekanism.common.Tier.BaseTier;
 import mekanism.common.Tier.EnergyCubeTier;
+import mekanism.common.base.ISideConfiguration;
 import mekanism.common.base.ISustainedInventory;
 import mekanism.common.base.ITierItem;
 import mekanism.common.capabilities.ItemCapabilityWrapper;
@@ -137,6 +138,17 @@ public class ItemBlockEnergyCube extends ItemBlock implements IEnergizedItem, IS
 				if(getOwner(stack) == null)
 				{
 					security.getSecurity().setOwner(player.getName());
+				}
+			}
+			
+			if(tileEntity instanceof ISideConfiguration)
+			{
+				ISideConfiguration config = (ISideConfiguration)tileEntity;
+
+				if(ItemDataUtils.hasData(stack, "sideDataStored"))
+				{
+					config.getConfig().read(ItemDataUtils.getDataMap(stack));
+					config.getEjector().read(ItemDataUtils.getDataMap(stack));
 				}
 			}
 
@@ -334,6 +346,11 @@ public class ItemBlockEnergyCube extends ItemBlock implements IEnergizedItem, IS
 	@Override
 	public SecurityMode getSecurity(ItemStack stack) 
 	{
+		if(!general.allowProtection)
+		{
+			return SecurityMode.PUBLIC;
+		}
+		
 		return SecurityMode.values()[ItemDataUtils.getInt(stack, "security")];
 	}
 

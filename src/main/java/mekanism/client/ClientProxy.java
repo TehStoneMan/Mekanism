@@ -255,7 +255,7 @@ public class ClientProxy extends CommonProxy
 	public static final String[] CUSTOM_RENDERS = new String[] {"fluid_tank", "bin_basic", "bin_advanced", "bin_elite", "bin_ultimate", 
 		"Jetpack", "FreeRunners", "AtomicDisassembler", "ScubaTank", "GasMask", "ArmoredJetpack", "Flamethrower", "personal_chest",
 		"solar_neutron_activator", "chemical_dissolution_chamber", "chemical_crystallizer", "seismic_vibrator", "security_desk",
-		"quantum_entangloporter", "resistive_heater", "EnergyCube", "digital_miner"};
+		"quantum_entangloporter", "resistive_heater", "EnergyCube", "digital_miner", "bin_creative"};
 	
 	private static final IStateMapper machineMapper = new MachineBlockStateMapper();
 	private static final IStateMapper basicMapper = new BasicBlockStateMapper();
@@ -372,6 +372,7 @@ public class ClientProxy extends CommonProxy
 		registerItemRender(MekanismItems.FilterUpgrade);
 		registerItemRender(MekanismItems.MufflingUpgrade);
 		registerItemRender(MekanismItems.GasUpgrade);
+		registerItemRender(MekanismItems.AnchorUpgrade);
 		registerItemRender(MekanismItems.Robit);
 		registerItemRender(MekanismItems.AtomicDisassembler);
 		registerItemRender(MekanismItems.EnrichedAlloy);
@@ -575,7 +576,7 @@ public class ClientProxy extends CommonProxy
 						{
 							tierPointer = BaseTier.values()[tierPointer.ordinal()+1];
 							
-							if(tierPointer.isObtainable())
+							if(type == BasicBlockType.BIN || tierPointer.isObtainable())
 							{
 								resource = "mekanism:" + type.getName() + "_" + tierPointer.getName();
 								
@@ -929,7 +930,7 @@ public class ClientProxy extends CommonProxy
 			@Override
 			public int getColorFromItemstack(ItemStack stack, int tintIndex) 
 			{
-				EnumDyeColor dyeColor = EnumDyeColor.byMetadata(stack.getItemDamage()&15);
+				EnumDyeColor dyeColor = EnumDyeColor.byDyeDamage(stack.getItemDamage()&15);
 				EnumColor dye = EnumColor.DYES[dyeColor.getDyeDamage()];
 				
 				return (int)(dye.getColor(0)*255) << 16 | (int)(dye.getColor(1)*255) << 8 | (int)(dye.getColor(2)*255);

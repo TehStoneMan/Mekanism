@@ -160,9 +160,16 @@ import com.mojang.authlib.GameProfile;
  * @author AidanBrady
  *
  */
-@Mod(modid = "Mekanism", name = "Mekanism", version = "9.1.0", guiFactory = "mekanism.client.gui.ConfigGuiFactory",
-		dependencies = "after:mcmultipart;after:JEI;after:BuildCraft;after:BuildCraftAPI;after:IC2;after:CoFHCore;" +
-				"after:ComputerCraft;after:Galacticraft API;after:MetallurgyCore")
+@Mod(modid = "Mekanism", name = "Mekanism", version = "9.2.1", guiFactory = "mekanism.client.gui.ConfigGuiFactory",
+		dependencies = 	"required-after:mcmultipart;" +
+						"after:JEI;" +
+						"after:BuildCraft;" +
+						"after:BuildCraftAPI;" +
+						"after:IC2;" +
+						"after:CoFHCore;" +
+						"after:ComputerCraft;" +
+						"after:Galacticraft API;" +
+						"after:MetallurgyCore")
 public class Mekanism
 {
 	/** Mekanism Packet Pipeline */
@@ -186,7 +193,7 @@ public class Mekanism
     public static Configuration configuration;
     
 	/** Mekanism version number */
-	public static Version versionNumber = new Version(9, 1, 0);
+	public static Version versionNumber = new Version(9, 2, 1);
 	
 	/** MultiblockManagers for various structrures */
 	public static MultiblockManager<SynchronizedTankData> tankManager = new MultiblockManager<SynchronizedTankData>("dynamicTank");
@@ -339,6 +346,9 @@ public class Mekanism
 		CraftingManager.getInstance().getRecipeList().add(new ShapedMekanismRecipe(new ItemStack(MekanismItems.MufflingUpgrade),
 			" G ", "ADA", " G ", Character.valueOf('G'), "blockGlass", Character.valueOf('A'), MekanismItems.EnrichedAlloy, Character.valueOf('D'), "dustSteel"
 		));
+		CraftingManager.getInstance().getRecipeList().add(new ShapedMekanismRecipe(new ItemStack(MekanismItems.AnchorUpgrade),
+				" G ", "ADA", " G ", Character.valueOf('G'), "blockGlass", Character.valueOf('A'), MekanismItems.EnrichedAlloy, Character.valueOf('D'), "dustDiamond"
+			));
 		CraftingManager.getInstance().getRecipeList().add(new ShapedMekanismRecipe(MekanismItems.AtomicDisassembler.getUnchargedItem(),
 			"AEA", "ACA", " O ", Character.valueOf('A'), MekanismItems.EnrichedAlloy, Character.valueOf('E'), MekanismItems.EnergyTablet.getUnchargedItem(), Character.valueOf('C'), MekanismItems.AtomicAlloy, Character.valueOf('O'), "ingotRefinedObsidian"
 		));
@@ -886,6 +896,10 @@ public class Mekanism
 		RecipeHandler.addCrusherRecipe(new ItemStack(Items.ROTTEN_FLESH), new ItemStack(MekanismItems.BioFuel, 2));
 		RecipeHandler.addCrusherRecipe(new ItemStack(Items.MELON), new ItemStack(MekanismItems.BioFuel, 4));
 		RecipeHandler.addCrusherRecipe(new ItemStack(Blocks.PUMPKIN), new ItemStack(MekanismItems.BioFuel, 6));
+		RecipeHandler.addCrusherRecipe(new ItemStack(Items.BAKED_POTATO), new ItemStack(MekanismItems.BioFuel, 4));
+		RecipeHandler.addCrusherRecipe(new ItemStack(Items.POISONOUS_POTATO), new ItemStack(MekanismItems.BioFuel, 4));
+		RecipeHandler.addCrusherRecipe(new ItemStack(Items.BEETROOT), new ItemStack(MekanismItems.BioFuel, 4));
+		RecipeHandler.addCrusherRecipe(new ItemStack(Items.BEETROOT_SEEDS), new ItemStack(MekanismItems.BioFuel, 2));
 
 		//Purification Chamber Recipes
         RecipeHandler.addPurificationChamberRecipe(new ItemStack(Blocks.GRAVEL), new ItemStack(Items.FLINT));
@@ -1036,7 +1050,7 @@ public class Mekanism
 	public void registerOreDict()
 	{
 		//Add specific items to ore dictionary for recipe usage in other mods.
-//		OreDictionary.registerOre("universalCable", new ItemStack(MekanismItems.PartTransmitter, 8, 0));
+		OreDictionary.registerOre("universalCable", new ItemStack(MekanismItems.PartTransmitter, 8, 0));
 		OreDictionary.registerOre("battery", MekanismItems.EnergyTablet.getUnchargedItem());
 		OreDictionary.registerOre("pulpWood", MekanismItems.Sawdust);
 		OreDictionary.registerOre("dustWood", MekanismItems.Sawdust);
@@ -1354,14 +1368,13 @@ public class Mekanism
 				}
 			}
 		}
-
-		//Load this module
-		addRecipes();
-		addEntities();
 		
 		//Integrate certain OreDictionary recipes
 		registerOreDict();
 
+		//Load this module
+		addRecipes();
+		addEntities();
 		
 		//Integrate with Waila
 		FMLInterModComms.sendMessage("Waila", "register", "mekanism.common.integration.WailaDataProvider.register");

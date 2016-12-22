@@ -1,0 +1,36 @@
+# Blender MTL File: 'Mekanism_models.blend'
+# Material Count: 3
+
+newmtl jetpack_base
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Minecraft Dev\Mekanism\src\main\resources\assets\mekanism\render\jetpack_base.png
+
+newmtl jetpack_chestplate
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Minecraft Dev\Mekanism\src\main\resources\assets\mekanism\render\jetpack_chestplate.png
+
+newmtl jetpack_wings
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd C:\Minecraft Dev\Mekanism\src\main\resources\assets\mekanism\render\jetpack_wings.png
+map_d C:\\Minecraft Dev\\Mekanism\\src\\main\\resources\\assets\\mekanism\\render\\jetpack_wings.png

@@ -1058,9 +1058,13 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 		return data;
 	}
 
+	/**
+	 * Return the total size of the area to be mined
+	 * 
+	 * @return
+	 */
 	public int getTotalSize()
 	{
-		// Get total size based on operation type
 		if( general.minerAltOperation )
 			return getDiameter()*getDiameter()*(getPos().getY() + radius + 1);
 		else

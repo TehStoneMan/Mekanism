@@ -140,31 +140,6 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 		upgradeComponent.setSupported(Upgrade.ANCHOR);
 	}
 
-	// *------*
-	// Support functions for alternative miner operations
-	private boolean isInsideSphere( int x, int y, int z, int radius )
-	{
-		return Math.pow( x, 2 ) + Math.pow( y, 2 ) + Math.pow( z, 2 ) - Math.pow( radius, 2 ) <= 0;
-	}
-	
-	private boolean isSurface( int x, int y, int z, int radius )
-	{
-		int setCount = 0;
-		int unsetCount = 0;
-		
-		if( isInsideSphere( x+1, y, z, radius) ) setCount++; else unsetCount++;
-		if( isInsideSphere( x-1, y, z, radius) ) setCount++; else unsetCount++;
-
-		if( isInsideSphere( x, y+1, z, radius) ) setCount++; else unsetCount++;
-		if( isInsideSphere( x, y-1, z, radius) ) setCount++; else unsetCount++;
-
-		if( isInsideSphere( x, y, z+1, radius) ) setCount++; else unsetCount++;
-		if( isInsideSphere( x, y, z-1, radius) ) setCount++; else unsetCount++;
-
-		return setCount > 0 && unsetCount > 0;
-	}
-	// *------*
-
 	@Override
 	public void onUpdate()
 	{
@@ -737,7 +712,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 
 		for(MinerFilter filter : filters)
 		{
-			filterTags.appendTag(filter.write(new NBTTagCompound()));
+			filterTags.appendTag(filter.writeToNBT(new NBTTagCompound()));
 		}
 
 		if(filterTags.tagCount() != 0)
@@ -1444,7 +1419,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 
 		for(MinerFilter filter : filters)
 		{
-			filterTags.appendTag(filter.write(new NBTTagCompound()));
+			filterTags.appendTag(filter.writeToNBT(new NBTTagCompound()));
 		}
 
 		if(filterTags.tagCount() != 0)
@@ -1499,7 +1474,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 
 		for(MinerFilter filter : filters)
 		{
-			filterTags.appendTag(filter.write(new NBTTagCompound()));
+			filterTags.appendTag(filter.writeToNBT(new NBTTagCompound()));
 		}
 
 		if(filterTags.tagCount() != 0)

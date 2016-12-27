@@ -7,6 +7,7 @@ import java.util.Map;
 import mekanism.api.Chunk3D;
 import mekanism.api.Coord4D;
 import mekanism.api.MekanismConfig.general;
+import mekanism.api.util.GeometryUtils;
 import mekanism.common.tile.TileEntityBoundingBlock;
 import mekanism.common.tile.TileEntityDigitalMiner;
 import mekanism.common.util.MekanismUtils;
@@ -36,31 +37,6 @@ public class ThreadMinerSearch extends Thread
 		digitalMiner = tileEntity;
 	}
 
-	// *------*
-	// Support functions for alternative miner operations
-	private boolean isInsideSphere( int x, int y, int z, int radius )
-	{
-		return Math.pow( x, 2 ) + Math.pow( y, 2 ) + Math.pow( z, 2 ) - Math.pow( radius, 2 ) <= 0;
-	}
-	
-	private boolean isSurface( int x, int y, int z, int radius )
-	{
-		int setCount = 0;
-		int unsetCount = 0;
-		
-		if( isInsideSphere( x+1, y, z, radius) ) setCount++; else unsetCount++;
-		if( isInsideSphere( x-1, y, z, radius) ) setCount++; else unsetCount++;
-
-		if( isInsideSphere( x, y+1, z, radius) ) setCount++; else unsetCount++;
-		if( isInsideSphere( x, y-1, z, radius) ) setCount++; else unsetCount++;
-
-		if( isInsideSphere( x, y, z+1, radius) ) setCount++; else unsetCount++;
-		if( isInsideSphere( x, y, z-1, radius) ) setCount++; else unsetCount++;
-
-		return setCount > 0 && unsetCount > 0;
-	}
-	// *------*
-
 	@Override
 	public void run()
 	{
@@ -75,6 +51,12 @@ public class ThreadMinerSearch extends Thread
 		Coord4D coord = digitalMiner.getStartingCoord();
 		int diameter = digitalMiner.getDiameter();
 		int size = digitalMiner.getTotalSize();
+
+		// Reset filters
+		for(MinerFilter filter : digitalMiner.filters)
+		{
+			filter.foundOres.clear();
+		}
 
 		for(int i = 0; i < size; i++)
 		{
@@ -103,7 +85,7 @@ public class ThreadMinerSearch extends Thread
 	
 				if(digitalMiner.getWorld().getChunkProvider().getLoadedChunk(x >> 4, z >> 4) == null)
 				{
-					// Skip ungenerated chunks
+					// Skip unloaded chunks
 					continue;
 				}
 	
@@ -127,7 +109,7 @@ public class ThreadMinerSearch extends Thread
 				// Perform checks related to alternative operations
 				if( general.minerAltOperation )
 				{
-					if( !isInsideSphere( x - digitalMiner.getPos().getX(), Math.max( y - digitalMiner.getPos().getY(), 0 ), z - digitalMiner.getPos().getZ(), diameter / 2 ) )
+					if( !GeometryUtils.isInsideSphere( x - digitalMiner.getPos().getX(), Math.max( y - digitalMiner.getPos().getY(), 0 ), z - digitalMiner.getPos().getZ(), diameter / 2 ) )
 					{
 						// Skip blocks outside operating boundaries
 						continue;
@@ -169,6 +151,7 @@ public class ThreadMinerSearch extends Thread
 					{
 						set(i, new Coord4D(x, y, z, digitalMiner.getWorld().provider.getDimension()));
 						replaceMap.put(i, filterFound);
+						filterFound.foundOres.add( new BlockPos( x, y, z ) );
 						
 						found++;
 					}

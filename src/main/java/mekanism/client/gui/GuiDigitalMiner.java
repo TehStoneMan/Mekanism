@@ -63,7 +63,7 @@ public class GuiDigitalMiner extends GuiMekanism
 			@Override
 			public List<String> getInfo()
 			{
-				String multiplier = MekanismUtils.getEnergyDisplay(tileEntity.getPerTick());
+				String multiplier = MekanismUtils.getEnergyDisplay(tileEntity.getPowerPerTick());
 				return ListUtils.asList(LangUtils.localize("gui.using") + ": " + multiplier + "/t", LangUtils.localize("gui.needed") + ": " + MekanismUtils.getEnergyDisplay(tileEntity.getMaxEnergy()-tileEntity.getEnergy()));
 			}
 		}, this, MekanismUtils.getResource(ResourceType.GUI, "GuiDigitalMiner.png")));

@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 import mekanism.api.Coord4D;
 import mekanism.api.EnumColor;
 import mekanism.api.MekanismConfig.general;
+import mekanism.api.util.GeometryUtils;
 import mekanism.client.render.MekanismRenderer.DisplayInteger;
 import mekanism.client.render.MekanismRenderer.Model3D;
 import mekanism.common.tile.TileEntityDigitalMiner;
@@ -15,8 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.init.Blocks;
-
-import org.lwjgl.opengl.GL11;
 
 public final class MinerVisualRenderer 
 {
@@ -29,43 +30,23 @@ public final class MinerVisualRenderer
 	public static void render(TileEntityDigitalMiner miner)
 	{
 		GlStateManager.pushMatrix();
-		GL11.glTranslated(getX(miner.getPos().getX()), getY(miner.getPos().getY()), getZ(miner.getPos().getZ()));
+		GlStateManager.translate( getX(miner.getPos().getX()), getY(miner.getPos().getY()), getZ(miner.getPos().getZ()) );
+
 		MekanismRenderer.blendOn();
 		MekanismRenderer.glowOn();
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.8F);
+
+		GlStateManager.enableCull();
+		GlStateManager.color( 1.0F, 1.0F, 1.0F, 0.8F );
+
 		mc.getTextureManager().bindTexture(MekanismRenderer.getBlocksTexture());
 		getList(new MinerRenderData(miner)).render();
+
 		MekanismRenderer.resetColor();
 		MekanismRenderer.glowOff();
 		MekanismRenderer.blendOff();
+
 		GlStateManager.popMatrix();
 	}
-	
-	// *------*
-	// Support functions for alternative miner operations
-	private static boolean isInsideSphere( int x, int y, int z, int radius )
-	{
-		return Math.pow( x, 2 ) + Math.pow( y, 2 ) + Math.pow( z, 2 ) - Math.pow( radius, 2 ) <= 0;
-	}
-	
-	private static boolean isSurface( int x, int y, int z, int radius )
-	{
-		int setCount = 0;
-		int unsetCount = 0;
-		
-		if( isInsideSphere( x+1, y, z, radius) ) setCount++; else unsetCount++;
-		if( isInsideSphere( x-1, y, z, radius) ) setCount++; else unsetCount++;
-
-		if( isInsideSphere( x, y+1, z, radius) ) setCount++; else unsetCount++;
-		if( isInsideSphere( x, y-1, z, radius) ) setCount++; else unsetCount++;
-
-		if( isInsideSphere( x, y, z+1, radius) ) setCount++; else unsetCount++;
-		if( isInsideSphere( x, y, z-1, radius) ) setCount++; else unsetCount++;
-
-		return setCount > 0 && unsetCount > 0;
-	}
-	// *------*
 	
 	private static DisplayInteger getList(MinerRenderData data)
 	{
@@ -79,13 +60,9 @@ public final class MinerVisualRenderer
 		
 		List<Model3D> models = new ArrayList<Model3D>();
 		
-		if( general.minerAltOperation )
+		if( !general.minerOldOperation )
 		{
-			// Alternate style operation:
-			// *------*
-			// Above miner: Hemisphere of radius <data.radius>
-			// Below miner: Cylinder of radius <data.radius> all the way to bottom of map.
-			// *------*
+			// Spherical style operation
 			for(int y = data.radius; y >= -data.yCoord; y--)
 			{
 				for(int z = -data.radius; z <= data.radius; z++)
@@ -93,7 +70,7 @@ public final class MinerVisualRenderer
 					for(int x = -data.radius; x <= data.radius; x++)
 					{
 						// Calculate if point is inside area of operation
-						if( isInsideSphere( x, Math.max( y, 0 ), z, data.radius ) && isSurface( x, Math.max( y, 0 ), z, data.radius )  )
+						if( GeometryUtils.isInsideSphere( x, y, z, data.radius ) && GeometryUtils.isOnSurface( x, y, z, data.radius )  )
 							models.add( createModel( new Coord4D( x, y, z, mc.theWorld.provider.getDimension() ) ) );
 					}
 				}
@@ -101,8 +78,7 @@ public final class MinerVisualRenderer
 		}
 		else
 		{
-			// Original style operation:
-			// Draw cubic region
+			// Cubic style operation:
 			for(int x = -data.radius; x <= data.radius; x++)
 			{
 				for(int y = data.minY-data.yCoord; y <= data.maxY-data.yCoord; y++)

@@ -175,7 +175,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 
 			ChargeUtils.discharge(27, this);
 
-			if(MekanismUtils.canFunction(this) && running && getEnergy() >= getPerTick() && searcher.state == State.FINISHED && oresToMine.size() > 0)
+			if(MekanismUtils.canFunction(this) && running && getEnergy() >= getPowerPerTick() && searcher.state == State.FINISHED && oresToMine.size() > 0)
 			{
 				setActive(true);
 
@@ -184,7 +184,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 					delay--;
 				}
 
-				setEnergy(getEnergy()-getPerTick());
+				setEnergy(getEnergy()-getPowerPerTick());
 
 				if(delay == 0)
 				{
@@ -341,22 +341,42 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 		}
 	}
 
-	public double getPerTick()
+	/**
+	 * Calculates the power usage per game tick
+	 * 
+	 * @return power used
+	 */
+	public double getPowerPerTick()
 	{
-		double ret = energyUsage;
+		double power = energyUsage;
 
 		if(silkTouch)
 		{
-			ret *= 6F;
+			power *= 6F;
 		}
 
 		int baseRad = Math.max(radius-10, 0);
-		ret *= (1 + ((float)baseRad/22F));
+		power *= (1 + ((float)baseRad/22F));
 
 		int baseHeight = Math.max((maxY-minY)-60, 0);
-		ret *= (1 + ((float)baseHeight/195F));
+		power *= (1 + ((float)baseHeight/195F));
 
-		return ret;
+		return power;
+	}
+	
+	/**
+	 * Calculates the power needed to mine a block at the given location
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return power needed
+	 */
+	public double getPowerForDistanceTo( int x, int y, int z )
+	{
+		double power = energyUsage;
+		double distance = getPos().getDistance( x, y, z );
+		return power * distance;
 	}
 
 	public int getDelay()
@@ -1040,7 +1060,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 	 */
 	public int getTotalSize()
 	{
-		if( general.minerAltOperation )
+		if( !general.minerOldOperation )
 			return getDiameter()*getDiameter()*(getPos().getY() + radius + 1);
 		else
 			return getDiameter()*getDiameter()*(maxY-minY+1);
@@ -1054,7 +1074,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 	public Coord4D getStartingCoord()
 	{
 		// Get stating coordinates based on operation type
-		if( general.minerAltOperation )
+		if( !general.minerOldOperation )
 			return new Coord4D(getPos().getX()-radius, getPos().getY()+radius, getPos().getZ()-radius, worldObj.provider.getDimension());
 		else
 			return new Coord4D(getPos().getX()-radius, minY, getPos().getZ()-radius, worldObj.provider.getDimension());
@@ -1066,7 +1086,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 		Coord4D start = getStartingCoord();
 		
 		int x = start.xCoord+index%diameter;
-		int y = general.minerAltOperation ? start.yCoord-(index/diameter/diameter) : start.yCoord+(index/diameter/diameter);
+		int y = general.minerOldOperation ? start.yCoord+(index/diameter/diameter) : start.yCoord-(index/diameter/diameter);
 		int z = start.zCoord+(index/diameter)%diameter;
 
 		return new Coord4D(x, y, z, worldObj.provider.getDimension());

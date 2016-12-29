@@ -63,7 +63,7 @@ public class ThreadMinerSearch extends Thread
 			int x = coord.xCoord+i%diameter;
 			int z = coord.zCoord+(i/diameter)%diameter;
 			// Start at top or bottom, depending on operation mode
-			int y = general.minerAltOperation ? coord.yCoord-(i/diameter/diameter) : coord.yCoord+(i/diameter/diameter);
+			int y = general.minerOldOperation ? coord.yCoord+(i/diameter/diameter) : coord.yCoord-(i/diameter/diameter);
 
 			if(digitalMiner.isInvalid())
 			{
@@ -106,10 +106,10 @@ public class ThreadMinerSearch extends Thread
 					continue;
 				}
 
-				// Perform checks related to alternative operations
-				if( general.minerAltOperation )
+				// Perform checks related to spherical operations
+				if( !general.minerOldOperation )
 				{
-					if( !GeometryUtils.isInsideSphere( x - digitalMiner.getPos().getX(), Math.max( y - digitalMiner.getPos().getY(), 0 ), z - digitalMiner.getPos().getZ(), diameter / 2 ) )
+					if( !GeometryUtils.isInsideSphere( x - digitalMiner.getPos().getX(), y - digitalMiner.getPos().getY(), z - digitalMiner.getPos().getZ(), diameter / 2 ) )
 					{
 						// Skip blocks outside operating boundaries
 						continue;

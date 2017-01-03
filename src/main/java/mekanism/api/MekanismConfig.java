@@ -42,8 +42,6 @@ public class MekanismConfig
 		public static double FROM_TESLA;
 		public static int laserRange;
 		public static double laserEnergyNeededPerHardness;
-		public static boolean minerOldOperation;
-		public static double minerSilkMultiplier = 6;
 		public static boolean blacklistIC2;
 		public static boolean blacklistRF;
 		public static boolean blacklistTesla;
@@ -71,6 +69,14 @@ public class MekanismConfig
 		public static boolean allowTransmitterAlloyUpgrade;
 		public static boolean allowChunkloading;
 		public static boolean allowProtection = true;
+	}
+	
+	public static class miner
+	{
+		public static boolean doOldOperation;
+		public static double silkPowerMultiplier;
+		public static double distancePowerMultiplier;
+		public static int defaultRadius;
 	}
 
 	public static class client

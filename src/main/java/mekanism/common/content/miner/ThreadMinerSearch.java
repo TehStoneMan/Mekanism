@@ -7,6 +7,7 @@ import java.util.Map;
 import mekanism.api.Chunk3D;
 import mekanism.api.Coord4D;
 import mekanism.api.MekanismConfig.general;
+import mekanism.api.MekanismConfig.miner;
 import mekanism.api.util.GeometryUtils;
 import mekanism.common.tile.TileEntityBoundingBlock;
 import mekanism.common.tile.TileEntityDigitalMiner;
@@ -63,7 +64,7 @@ public class ThreadMinerSearch extends Thread
 			int x = coord.xCoord+i%diameter;
 			int z = coord.zCoord+(i/diameter)%diameter;
 			// Start at top or bottom, depending on operation mode
-			int y = general.minerOldOperation ? coord.yCoord+(i/diameter/diameter) : coord.yCoord-(i/diameter/diameter);
+			int y = miner.doOldOperation ? coord.yCoord+(i/diameter/diameter) : coord.yCoord-(i/diameter/diameter);
 
 			if(digitalMiner.isInvalid())
 			{
@@ -107,7 +108,7 @@ public class ThreadMinerSearch extends Thread
 				}
 
 				// Perform checks related to spherical operations
-				if( !general.minerOldOperation )
+				if( !miner.doOldOperation )
 				{
 					if( !GeometryUtils.isInsideSphere( x - digitalMiner.getPos().getX(), y - digitalMiner.getPos().getY(), z - digitalMiner.getPos().getZ(), diameter / 2 ) )
 					{
@@ -151,7 +152,8 @@ public class ThreadMinerSearch extends Thread
 					{
 						set(i, new Coord4D(x, y, z, digitalMiner.getWorld().provider.getDimension()));
 						replaceMap.put(i, filterFound);
-						filterFound.foundOres.add( new BlockPos( x, y, z ) );
+						if( !filterFound.invertFilter )
+							filterFound.foundOres.add( new BlockPos( x, y, z ) );
 						
 						found++;
 					}

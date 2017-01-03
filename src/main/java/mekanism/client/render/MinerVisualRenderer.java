@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import mekanism.api.Coord4D;
 import mekanism.api.EnumColor;
 import mekanism.api.MekanismConfig.general;
+import mekanism.api.MekanismConfig.miner;
 import mekanism.api.util.GeometryUtils;
 import mekanism.client.render.MekanismRenderer.DisplayInteger;
 import mekanism.client.render.MekanismRenderer.Model3D;
@@ -60,7 +61,7 @@ public final class MinerVisualRenderer
 		
 		List<Model3D> models = new ArrayList<Model3D>();
 		
-		if( !general.minerOldOperation )
+		if( !miner.doOldOperation )
 		{
 			// Spherical style operation
 			for(int y = data.radius; y >= -data.yCoord; y--)

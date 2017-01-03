@@ -15,6 +15,8 @@ public abstract class MinerFilter
 {
 	public ItemStack replaceStack;
 	public boolean requireStack;
+	public boolean hasSilkTouch;
+	public boolean invertFilter;
 
 	// A list of locations where ores matching this filter have been found
 	public List<BlockPos> foundOres = new ArrayList<BlockPos>();
@@ -47,7 +49,10 @@ public abstract class MinerFilter
 			tagList.appendTag( tagCompound );
 			nbtTags.setTag( "foundOres", tagList );
 		}
-		
+
+		nbtTags.setBoolean("hasSilkTouch", hasSilkTouch);
+		nbtTags.setBoolean("invertFilter", invertFilter);
+
 		return nbtTags;
 	}
 
@@ -72,6 +77,9 @@ public abstract class MinerFilter
 				foundOres.add( BlockPos.fromLong( pos ) );
 			}
 		}
+
+		hasSilkTouch = nbtTags.getBoolean("hasSilkTouch");
+		invertFilter = nbtTags.getBoolean("invertFilter");
 	}
 
 	public void write(ArrayList<Object> data)
@@ -87,7 +95,10 @@ public abstract class MinerFilter
 		else {
 			data.add(false);
 		}
-	}
+
+		data.add(hasSilkTouch);
+		data.add(invertFilter);
+}
 
 	protected void read(ByteBuf dataStream)
 	{
@@ -100,7 +111,10 @@ public abstract class MinerFilter
 		else {
 			replaceStack = null;
 		}
-	}
+
+		hasSilkTouch = dataStream.readBoolean();
+		invertFilter = dataStream.readBoolean();
+}
 
 	public static MinerFilter readFromNBT(NBTTagCompound nbtTags)
 	{
@@ -162,5 +176,19 @@ public abstract class MinerFilter
 	public boolean equals(Object filter)
 	{
 		return filter instanceof MinerFilter;
+	}
+
+	/**
+	 * Determins if this filter is valid
+	 * 
+	 * @return True or False
+	 */
+	public boolean isValid()
+	{
+		// Can't replace with a mineable block
+		if( replaceStack != null && canFilter( replaceStack ) )
+			return false;
+
+		return true;
 	}
 }

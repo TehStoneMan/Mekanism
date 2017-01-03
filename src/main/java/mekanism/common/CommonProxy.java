@@ -7,6 +7,7 @@ import mekanism.api.Coord4D;
 import mekanism.api.MekanismAPI;
 import mekanism.api.MekanismConfig.general;
 import mekanism.api.MekanismConfig.machines;
+import mekanism.api.MekanismConfig.miner;
 import mekanism.api.MekanismConfig.usage;
 import mekanism.api.Pos3D;
 import mekanism.api.util.UnitDisplayUtils.EnergyType;
@@ -241,8 +242,6 @@ public class CommonProxy implements IGuiProvider
 		general.VOICE_PORT = Mekanism.configuration.get(Configuration.CATEGORY_GENERAL, "VoicePort", 36123, null, 1, 65535).getInt();
 		//If this is less than 1, upgrades make machines worse. If less than 0, I don't even know.
 		general.maxUpgradeMultiplier = Mekanism.configuration.get(Configuration.CATEGORY_GENERAL, "UpgradeModifier", 10, null, 1, Integer.MAX_VALUE).getInt();
-		general.minerOldOperation = Mekanism.configuration.get(Configuration.CATEGORY_GENERAL, "MinerUseOldMethod", false).getBoolean();
-		general.minerSilkMultiplier = Mekanism.configuration.get(Configuration.CATEGORY_GENERAL, "MinerSilkMultiplier", 6).getDouble();
 		general.prefilledGasTanks = Mekanism.configuration.get(Configuration.CATEGORY_GENERAL, "PrefilledGasTanks", true).getBoolean();
 		general.armoredJetpackDamageRatio = Mekanism.configuration.get(Configuration.CATEGORY_GENERAL, "ArmoredJetpackDamageRatio", 0.8).getDouble();
 		general.armoredJetpackDamageMax = Mekanism.configuration.get(Configuration.CATEGORY_GENERAL, "ArmoredJepackDamageMax", 115).getInt();
@@ -323,6 +322,10 @@ public class CommonProxy implements IGuiProvider
 		general.laserEnergyNeededPerHardness = Mekanism.configuration.get("general", "LaserDiggingEnergy", 100000).getInt();
 		general.destroyDisabledBlocks = Mekanism.configuration.get("general", "DestroyDisabledBlocks", true).getBoolean();
 
+		miner.doOldOperation = Mekanism.configuration.get("miner", "UseOldMinerMethod", false).getBoolean();
+		miner.silkPowerMultiplier = Mekanism.configuration.get("miner", "SilkPowerMultiplier", 6).getDouble();
+		miner.distancePowerMultiplier = Mekanism.configuration.get("miner", "DistancePowerMultiplier", 0.45).getDouble();
+		miner.defaultRadius = Mekanism.configuration.get( "miner", "DefaultRadius", 10 ).getInt();
 		
 		for(MachineType type : BlockStateMachine.MachineType.getValidMachines())
 		{

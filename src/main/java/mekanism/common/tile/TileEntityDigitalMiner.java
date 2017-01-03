@@ -15,6 +15,7 @@ import io.netty.buffer.ByteBuf;
 import mekanism.api.Chunk3D;
 import mekanism.api.Coord4D;
 import mekanism.api.MekanismConfig.general;
+import mekanism.api.MekanismConfig.miner;
 import mekanism.api.MekanismConfig.usage;
 import mekanism.api.Range4D;
 import mekanism.api.util.CapabilityUtils;
@@ -135,7 +136,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 	{
 		super("DigitalMiner", BlockStateMachine.MachineType.DIGITAL_MINER.baseEnergy);
 		inventory = new ItemStack[29];
-		radius = 10;
+		radius = miner.defaultRadius;
 		
 		upgradeComponent.setSupported(Upgrade.ANCHOR);
 	}
@@ -158,6 +159,8 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 
 		if(!worldObj.isRemote)
 		{
+			ChargeUtils.discharge(27, this);
+
 			if(!initCalc)
 			{
 				if(searcher.state == State.FINISHED)
@@ -173,7 +176,6 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 				initCalc = true;
 			}
 
-			ChargeUtils.discharge(27, this);
 
 			if(MekanismUtils.canFunction(this) && running && getEnergy() >= getPowerPerTick() && searcher.state == State.FINISHED && oresToMine.size() > 0)
 			{
@@ -352,15 +354,17 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 
 		if(silkTouch)
 		{
-			power *= 6F;
+			power *= miner.silkPowerMultiplier;
 		}
 
-		int baseRad = Math.max(radius-10, 0);
-		power *= (1 + ((float)baseRad/22F));
-
-		int baseHeight = Math.max((maxY-minY)-60, 0);
-		power *= (1 + ((float)baseHeight/195F));
-
+		if( miner.doOldOperation )
+		{
+			int baseRad = Math.max(radius-10, 0);
+			power *= (1 + ((float)baseRad/22F));
+			
+			int baseHeight = Math.max((maxY-minY)-60,0);
+			power *= (1 + ((float)baseHeight/195F));
+		}
 		return power;
 	}
 	
@@ -374,9 +378,9 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 	 */
 	public double getPowerForDistanceTo( int x, int y, int z )
 	{
-		double power = energyUsage;
+		double power = getPowerPerTick();
 		double distance = getPos().getDistance( x, y, z );
-		return power * distance;
+		return power * distance * miner.distancePowerMultiplier;
 	}
 
 	public int getDelay()
@@ -1060,7 +1064,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 	 */
 	public int getTotalSize()
 	{
-		if( !general.minerOldOperation )
+		if( !miner.doOldOperation )
 			return getDiameter()*getDiameter()*(getPos().getY() + radius + 1);
 		else
 			return getDiameter()*getDiameter()*(maxY-minY+1);
@@ -1074,7 +1078,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 	public Coord4D getStartingCoord()
 	{
 		// Get stating coordinates based on operation type
-		if( !general.minerOldOperation )
+		if( !miner.doOldOperation )
 			return new Coord4D(getPos().getX()-radius, getPos().getY()+radius, getPos().getZ()-radius, worldObj.provider.getDimension());
 		else
 			return new Coord4D(getPos().getX()-radius, minY, getPos().getZ()-radius, worldObj.provider.getDimension());
@@ -1086,7 +1090,7 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 		Coord4D start = getStartingCoord();
 		
 		int x = start.xCoord+index%diameter;
-		int y = general.minerOldOperation ? start.yCoord+(index/diameter/diameter) : start.yCoord-(index/diameter/diameter);
+		int y = miner.doOldOperation ? start.yCoord+(index/diameter/diameter) : start.yCoord-(index/diameter/diameter);
 		int z = start.zCoord+(index/diameter)%diameter;
 
 		return new Coord4D(x, y, z, worldObj.provider.getDimension());

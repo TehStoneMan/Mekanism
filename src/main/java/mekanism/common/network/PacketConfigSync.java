@@ -3,6 +3,7 @@ package mekanism.common.network;
 import io.netty.buffer.ByteBuf;
 import mekanism.api.MekanismConfig.general;
 import mekanism.api.MekanismConfig.machines;
+import mekanism.api.MekanismConfig.miner;
 import mekanism.api.MekanismConfig.usage;
 import mekanism.api.util.UnitDisplayUtils.EnergyType;
 import mekanism.common.Mekanism;
@@ -52,7 +53,6 @@ public class PacketConfigSync implements IMessageHandler<ConfigSyncMessage, IMes
 			dataStream.writeInt(general.VOICE_PORT);
 			dataStream.writeInt(general.maxUpgradeMultiplier);
 			dataStream.writeInt(general.energyUnit.ordinal());
-			dataStream.writeDouble(general.minerSilkMultiplier);
 			dataStream.writeBoolean(general.blacklistIC2);
 			dataStream.writeBoolean(general.blacklistRF);
 			dataStream.writeBoolean(general.blacklistTesla);
@@ -78,6 +78,11 @@ public class PacketConfigSync implements IMessageHandler<ConfigSyncMessage, IMes
 			dataStream.writeBoolean(general.allowTransmitterAlloyUpgrade);
 			dataStream.writeBoolean(general.allowChunkloading);
 			dataStream.writeBoolean(general.allowProtection);
+			
+			dataStream.writeBoolean( miner.doOldOperation );
+			dataStream.writeDouble( miner.silkPowerMultiplier );
+			dataStream.writeDouble( miner.distancePowerMultiplier );
+			dataStream.writeInt( miner.defaultRadius );
 			
 			for(MachineType type : BlockStateMachine.MachineType.getValidMachines())
 			{
@@ -145,7 +150,6 @@ public class PacketConfigSync implements IMessageHandler<ConfigSyncMessage, IMes
 			general.VOICE_PORT = dataStream.readInt();
 			general.maxUpgradeMultiplier = dataStream.readInt();
 			general.energyUnit = EnergyType.values()[dataStream.readInt()];
-			general.minerSilkMultiplier = dataStream.readDouble();
 			general.blacklistIC2 = dataStream.readBoolean();
 			general.blacklistRF = dataStream.readBoolean();
 			general.blacklistTesla = dataStream.readBoolean();
@@ -172,6 +176,11 @@ public class PacketConfigSync implements IMessageHandler<ConfigSyncMessage, IMes
 			general.allowChunkloading = dataStream.readBoolean();
 			general.allowProtection = dataStream.readBoolean();
 			
+			miner.doOldOperation = dataStream.readBoolean();
+			miner.silkPowerMultiplier = dataStream.readDouble();
+			miner.distancePowerMultiplier = dataStream.readDouble();
+			miner.defaultRadius = dataStream.readInt();
+
 			for(MachineType type : BlockStateMachine.MachineType.getValidMachines())
 			{
 				machines.setEntry(type.machineName, dataStream.readBoolean());

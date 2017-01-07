@@ -1,21 +1,21 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "mekanism:nothing"
-  },
-  "variants": {
+  "defaults": { "model": "mekanism:digital_miner.obj", "custom": { "flip-v": true } },
+  "variants":
+  {
     "normal": [{}],
-    "facing": {
+    "facing":
+    {
       "north": {},
       "south": {"y": 180},
       "east":  {"y": 90},
       "west":  {"y": -90}
     },
-    "active": {
+    "active":
+    {
       "true": {},
       "false": {}
     },
     "inventory": [{}]
   }
 }
-

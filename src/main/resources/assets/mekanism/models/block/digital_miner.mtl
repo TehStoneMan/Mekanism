@@ -1,0 +1,32 @@
+# Blender MTL File: 'Digital_Miner.blend'
+# Material Count: 5
+
+newmtl digital_miner
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+d 1.000000
+map_Kd mekanism:models/digital_miner
+
+newmtl digital_miner_ports
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+d 1.000000
+map_Kd mekanism:models/digital_miner_ports
+
+newmtl monitor_c
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+d 1.000000
+map_Kd mekanism:models/digital_miner_screen
+
+newmtl monitor_l
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+d 1.000000
+map_Kd mekanism:models/digital_miner_screen
+
+newmtl monitor_r
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+d 1.000000
+map_Kd mekanism:models/digital_miner_screen

@@ -520,6 +520,8 @@ public class ClientProxy extends CommonProxy
 			ModelLoader.registerItemVariants(Item.getItemFromBlock(type.typeBlock.getBlock()), modelsToAdd.toArray(new ModelResourceLocation[] {}));
 		}
 
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MekanismBlocks.DigitalMiner), 0, new ModelResourceLocation("mekanism:digital_miner", "inventory"));
+
 		for(BasicBlockType type : BasicBlockType.values())
 		{
 			List<ModelResourceLocation> modelsToAdd = new ArrayList<ModelResourceLocation>();

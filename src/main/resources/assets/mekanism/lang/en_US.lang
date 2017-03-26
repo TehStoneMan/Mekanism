@@ -134,7 +134,7 @@ tile.MachineBlock.ElectricPump.name=Electric Pump
 tile.MachineBlock.PersonalChest.name=Personal Chest
 tile.MachineBlock.Chargepad.name=Chargepad
 tile.MachineBlock.LogisticalSorter.name=Logistical Sorter
-tile.MachineBlock.DigitalMiner.name=Digital Miner
+tile.MachineBlock.DigitalMiner.name=Digital Miner (depreciated)
 
 //Machine Block 2 (second ID iteration)
 tile.MachineBlock2.RotaryCondensentrator.name=Rotary Condensentrator
@@ -162,6 +162,9 @@ tile.MachineBlock3.Oredictionificator.name=Oredictionificator
 tile.MachineBlock3.ResistiveHeater.name=Resistive Heater
 tile.MachineBlock3.FormulaicAssemblicator.name=Formulaic Assemblicator
 tile.MachineBlock3.FuelwoodHeater.name=Fuelwood Heater
+
+//Updated Machines
+tile.digital_miner.name=Digital Miner
 
 //Plastic
 tile.PlasticBlock.name=Plastic Block

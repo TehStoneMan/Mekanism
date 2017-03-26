@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import mcmultipart.client.multipart.MultipartRegistryClient;
 import mekanism.api.Coord4D;
@@ -255,7 +256,7 @@ public class ClientProxy extends CommonProxy
 	public static final String[] CUSTOM_RENDERS = new String[] {"fluid_tank", "bin_basic", "bin_advanced", "bin_elite", "bin_ultimate", 
 		"Jetpack", "FreeRunners", "AtomicDisassembler", "ScubaTank", "GasMask", "ArmoredJetpack", "Flamethrower", "personal_chest",
 		"solar_neutron_activator", "chemical_dissolution_chamber", "chemical_crystallizer", "seismic_vibrator", "security_desk",
-		"quantum_entangloporter", "resistive_heater", "EnergyCube", "digital_miner", "bin_creative"};
+		"quantum_entangloporter", "resistive_heater", "EnergyCube", "bin_creative"};
 	
 	private static final IStateMapper machineMapper = new MachineBlockStateMapper();
 	private static final IStateMapper basicMapper = new BasicBlockStateMapper();
@@ -332,7 +333,7 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.registerTileEntity(TileEntityChargepad.class, "Chargepad", new RenderChargepad());
 		ClientRegistry.registerTileEntity(TileEntityLogisticalSorter.class, "LogisticalSorter", new RenderLogisticalSorter());
 		ClientRegistry.registerTileEntity(TileEntityBin.class, "Bin", new RenderBin());
-		ClientRegistry.registerTileEntity(TileEntityDigitalMiner.class, "DigitalMiner", new RenderDigitalMiner());
+		//ClientRegistry.registerTileEntity(TileEntityDigitalMiner.class, "DigitalMiner", new RenderDigitalMiner());
 		ClientRegistry.registerTileEntity(TileEntityTeleporter.class, "MekanismTeleporter", new RenderTeleporter());
 		ClientRegistry.registerTileEntity(TileEntityChemicalInjectionChamber.class, "ChemicalInjectionChamber", new RenderConfigurableMachine<TileEntityChemicalInjectionChamber>());
 		ClientRegistry.registerTileEntity(TileEntityThermalEvaporationController.class, "ThermalEvaporationController", new RenderThermalEvaporationController());
@@ -431,6 +432,9 @@ public class ClientProxy extends CommonProxy
 		ModelLoader.setCustomStateMapper(MekanismBlocks.MachineBlock, machineMapper);
 		ModelLoader.setCustomStateMapper(MekanismBlocks.MachineBlock2, machineMapper);
 		ModelLoader.setCustomStateMapper(MekanismBlocks.MachineBlock3, machineMapper);
+		
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MekanismBlocks.blockDigitalMiner), 0, new ModelResourceLocation("mekanism:digital_miner", "inventory"));
+		
 		ModelLoader.setCustomStateMapper(MekanismBlocks.BasicBlock, basicMapper);
 		ModelLoader.setCustomStateMapper(MekanismBlocks.BasicBlock2, basicMapper);
 		ModelLoader.setCustomStateMapper(MekanismBlocks.PlasticBlock, plasticMapper);
@@ -440,7 +444,7 @@ public class ClientProxy extends CommonProxy
 		ModelLoader.setCustomStateMapper(MekanismBlocks.RoadPlasticBlock, plasticMapper);
 		ModelLoader.setCustomStateMapper(MekanismBlocks.PlasticFence, fenceMapper);
 		ModelLoader.setCustomStateMapper(MekanismBlocks.CardboardBox, boxMapper);
-		
+
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MekanismBlocks.ObsidianTNT), 0, new ModelResourceLocation("mekanism:ObsidianTNT", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MekanismBlocks.SaltBlock), 0, new ModelResourceLocation("mekanism:SaltBlock", "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(MekanismBlocks.CardboardBox), 0, new ModelResourceLocation("mekanism:CardboardBox", "storage=false"));
@@ -671,7 +675,7 @@ public class ClientProxy extends CommonProxy
 		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(MekanismBlocks.BasicBlock), basicMesher);
 		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(MekanismBlocks.BasicBlock2), basicMesher);
 		
-		OBJLoader.INSTANCE.addDomain("mekanism");
+		//OBJLoader.INSTANCE.addDomain("mekanism");
 	}
 	
 	public void registerItemRender(Item item)
@@ -982,6 +986,8 @@ public class ClientProxy extends CommonProxy
 		MinecraftForge.EVENT_BUS.register(new CTMRegistry());
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(MekanismOBJLoader.INSTANCE);
+		
+		OBJLoader.INSTANCE.addDomain( "mekanism" );
 		
 		//Register entity rendering handlers
 		RenderingRegistry.registerEntityRenderingHandler(EntityObsidianTNT.class, new IRenderFactory<EntityObsidianTNT>() {

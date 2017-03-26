@@ -15,12 +15,12 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class RenderDigitalMiner extends TileEntitySpecialRenderer<TileEntityDigitalMiner>
 {
-	private ModelDigitalMiner model = new ModelDigitalMiner();
+	//private ModelDigitalMiner model = new ModelDigitalMiner();
 	
 	@Override
 	public void renderTileEntityAt(TileEntityDigitalMiner tileEntity, double x, double y, double z, float partialTick, int destroyStage)
 	{
-		GlStateManager.pushMatrix();
+		/*GlStateManager.pushMatrix();
 		GlStateManager.translate((float)x + 0.5F, (float)y + 1.5F, (float)z + 0.5F);
 
 		bindTexture(MekanismUtils.getResource(ResourceType.RENDER, "DigitalMiner.png"));
@@ -43,11 +43,11 @@ public class RenderDigitalMiner extends TileEntitySpecialRenderer<TileEntityDigi
 				GL11.glRotatef(270, 0.0F, 1.0F, 0.0F);
 				GL11.glTranslatef(0.0F, 0.0F, -1.0F);
 				break;
-		}
+		}*/
 
-		GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
+		/*GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
 		model.render(0.0625F, tileEntity.isActive, rendererDispatcher.renderEngine, true);
-		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();*/
 		
 		if(tileEntity.clientRendering)
 		{

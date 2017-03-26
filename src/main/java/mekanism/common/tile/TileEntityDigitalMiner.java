@@ -1,7 +1,5 @@
 package mekanism.common.tile;
 
-import io.netty.buffer.ByteBuf;
-
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.EnumSet;
@@ -11,8 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import io.netty.buffer.ByteBuf;
 import mekanism.api.Chunk3D;
 import mekanism.api.Coord4D;
 import mekanism.api.MekanismConfig.usage;
@@ -20,12 +20,15 @@ import mekanism.api.Range4D;
 import mekanism.api.util.CapabilityUtils;
 import mekanism.common.HashList;
 import mekanism.common.Mekanism;
+import mekanism.common.MekanismBlocks;
 import mekanism.common.Upgrade;
 import mekanism.common.base.IActiveState;
 import mekanism.common.base.IAdvancedBoundingBlock;
 import mekanism.common.base.IRedstoneControl;
 import mekanism.common.base.ISustainedData;
 import mekanism.common.base.IUpgradeTile;
+import mekanism.common.block.BlockDigitalMiner;
+import mekanism.common.block.BlockMachine;
 import mekanism.common.block.states.BlockStateMachine;
 import mekanism.common.capabilities.Capabilities;
 import mekanism.common.chunkloading.IChunkLoader;
@@ -45,6 +48,7 @@ import mekanism.common.tile.component.TileComponentUpgrade;
 import mekanism.common.util.ChargeUtils;
 import mekanism.common.util.InventoryUtils;
 import mekanism.common.util.ItemDataUtils;
+import mekanism.common.util.LangUtils;
 import mekanism.common.util.MekanismUtils;
 import mekanism.common.util.MinerUtils;
 import mekanism.common.util.TransporterUtils;
@@ -63,6 +67,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
@@ -138,6 +143,12 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 		radius = 10;
 		
 		upgradeComponent.setSupported(Upgrade.ANCHOR);
+	}
+	
+	@Override
+	public boolean shouldRefresh( World world, BlockPos pos, IBlockState oldState, IBlockState newState )
+	{
+		return !( oldState.getBlock() == newState.getBlock() );
 	}
 
 	@Override
@@ -1571,5 +1582,11 @@ public class TileEntityDigitalMiner extends TileEntityElectricBlock implements I
 	public Set<ChunkPos> getChunkSet()
 	{
 		return new Range4D(Coord4D.get(this)).expandFromCenter(radius).getIntersectingChunks().stream().map(t -> t.getPos()).collect(Collectors.toSet());
+	}
+
+	@Override
+	public String getName()
+	{
+		return LangUtils.localize(getBlockType().getUnlocalizedName() + ".name");
 	}
 }

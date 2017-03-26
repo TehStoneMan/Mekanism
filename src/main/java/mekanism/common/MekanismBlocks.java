@@ -5,9 +5,11 @@ import static mekanism.common.block.states.BlockStateBasic.BasicBlock.BASIC_BLOC
 import static mekanism.common.block.states.BlockStateMachine.MachineBlock.MACHINE_BLOCK_1;
 import static mekanism.common.block.states.BlockStateMachine.MachineBlock.MACHINE_BLOCK_2;
 import static mekanism.common.block.states.BlockStateMachine.MachineBlock.MACHINE_BLOCK_3;
+
 import mekanism.common.block.BlockBasic;
 import mekanism.common.block.BlockBounding;
 import mekanism.common.block.BlockCardboardBox;
+import mekanism.common.block.BlockDigitalMiner;
 import mekanism.common.block.BlockEnergyCube;
 import mekanism.common.block.BlockGasTank;
 import mekanism.common.block.BlockMachine;
@@ -19,6 +21,7 @@ import mekanism.common.block.BlockSalt;
 import mekanism.common.block.states.BlockStatePlastic.PlasticBlockType;
 import mekanism.common.item.ItemBlockBasic;
 import mekanism.common.item.ItemBlockCardboardBox;
+import mekanism.common.item.ItemBlockDigitalMiner;
 import mekanism.common.item.ItemBlockEnergyCube;
 import mekanism.common.item.ItemBlockGasTank;
 import mekanism.common.item.ItemBlockMachine;
@@ -37,6 +40,7 @@ public class MekanismBlocks
 	public static Block MachineBlock = BlockMachine.getBlockMachine(MACHINE_BLOCK_1);
 	public static Block MachineBlock2 = BlockMachine.getBlockMachine(MACHINE_BLOCK_2);
 	public static Block MachineBlock3 = BlockMachine.getBlockMachine(MACHINE_BLOCK_3);
+	public static Block blockDigitalMiner = new BlockDigitalMiner();
 	public static Block OreBlock = new BlockOre();
 	public static Block ObsidianTNT = new BlockObsidianTNT().setCreativeTab(Mekanism.tabMekanism);
 	public static Block EnergyCube = new BlockEnergyCube();
@@ -61,6 +65,7 @@ public class MekanismBlocks
 		GameRegistry.register(init(MachineBlock, "MachineBlock"));
 		GameRegistry.register(init(MachineBlock2, "MachineBlock2"));
 		GameRegistry.register(init(MachineBlock3, "MachineBlock3"));
+		GameRegistry.register(init(blockDigitalMiner, "digital_miner"));
 		GameRegistry.register(init(OreBlock, "OreBlock"));
 		GameRegistry.register(init(EnergyCube, "EnergyCube"));
 		GameRegistry.register(init(ObsidianTNT, "ObsidianTNT"));
@@ -80,6 +85,7 @@ public class MekanismBlocks
 		GameRegistry.register(MekanismItems.init(new ItemBlockMachine(MachineBlock), "MachineBlock"));
 		GameRegistry.register(MekanismItems.init(new ItemBlockMachine(MachineBlock2), "MachineBlock2"));
 		GameRegistry.register(MekanismItems.init(new ItemBlockMachine(MachineBlock3), "MachineBlock3"));
+		GameRegistry.register(MekanismItems.init(new ItemBlockDigitalMiner(blockDigitalMiner), "digital_miner" ));
 		GameRegistry.register(MekanismItems.init(new ItemBlockOre(OreBlock), "OreBlock"));
 		GameRegistry.register(MekanismItems.init(new ItemBlockEnergyCube(EnergyCube), "EnergyCube"));
 		GameRegistry.register(MekanismItems.init(new ItemBlock(ObsidianTNT), "ObsidianTNT"));

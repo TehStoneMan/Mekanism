@@ -96,7 +96,7 @@ import buildcraft.api.tools.IToolWrench;
  * 0:1: Osmium Compressor
  * 0:2: Combiner
  * 0:3: Crusher
- * 0:4: Digital Miner
+ * 0:4: Digital Miner (depreciated)
  * 0:5: Basic Factory
  * 0:6: Advanced Factory
  * 0:7: Elite Factory

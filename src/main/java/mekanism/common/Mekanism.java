@@ -118,6 +118,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeProvider;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -409,7 +410,7 @@ public class Mekanism
 		BlockStateMachine.MachineType.LOGISTICAL_SORTER.addRecipe(new ShapedMekanismRecipe(new ItemStack(MekanismBlocks.MachineBlock, 1, 15),
 			"IPI", "ICI", "III", Character.valueOf('I'), "ingotIron", Character.valueOf('P'), Blocks.PISTON, Character.valueOf('C'), MekanismUtils.getControlCircuit(BaseTier.BASIC)
 		));
-		BlockStateMachine.MachineType.DIGITAL_MINER.addRecipe(new ShapedMekanismRecipe(new ItemStack(MekanismBlocks.MachineBlock, 1, 4),
+		CraftingManager.getInstance().getRecipeList().add(new ShapedMekanismRecipe( new ItemStack(MekanismBlocks.blockDigitalMiner),
 			"ACA", "SES", "TIT", Character.valueOf('A'), MekanismItems.AtomicAlloy, Character.valueOf('C'), MekanismUtils.getControlCircuit(BaseTier.BASIC), Character.valueOf('S'), new ItemStack(MekanismBlocks.MachineBlock, 1, 15), Character.valueOf('E'), MekanismItems.Robit.getUnchargedItem(),
 			Character.valueOf('I'), new ItemStack(MekanismBlocks.BasicBlock, 1, 8), Character.valueOf('T'), MekanismItems.TeleportationCore
 		));
@@ -1295,14 +1296,14 @@ public class Mekanism
 			logger.info("Detected Tekkit in root directory - hello, fellow user!");
 		}
 		
+		Mekanism.proxy.preInit();
+
 		//Register blocks and items
 		MekanismItems.register();
 		MekanismBlocks.register();
 
 		//Set up multiparts
 		new MultipartMekanism();
-
-		Mekanism.proxy.preInit();
 
 		//Register infuses
         InfuseRegistry.registerInfuseType(new InfuseType("CARBON", new ResourceLocation("mekanism:blocks/infuse/Carbon")).setUnlocalizedName("carbon"));

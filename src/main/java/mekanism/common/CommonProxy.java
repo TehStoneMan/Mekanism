@@ -12,6 +12,7 @@ import mekanism.api.Pos3D;
 import mekanism.api.util.UnitDisplayUtils.EnergyType;
 import mekanism.api.util.UnitDisplayUtils.TempType;
 import mekanism.client.SparkleAnimation.INodeChecker;
+import mekanism.client.render.tileentity.RenderDigitalMiner;
 import mekanism.common.base.IGuiProvider;
 import mekanism.common.base.IUpgradeTile;
 import mekanism.common.block.states.BlockStateMachine;
@@ -130,6 +131,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
@@ -368,7 +370,9 @@ public class CommonProxy implements IGuiProvider
 	public void init() 
 	{
 		MinecraftForge.EVENT_BUS.register(Mekanism.worldTickHandler);
-	}
+
+		GameRegistry.registerTileEntity(TileEntityDigitalMiner.class, "DigitalMiner");
+}
 
 	/**
 	 * Whether or not the game is paused.
